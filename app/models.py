@@ -2,6 +2,8 @@ from datetime import datetime, timezone
 
 from .extensions import db
 
+#define a tabela livros 
+
 class Book (db.Model):
     __tablename__ = "books"
 

@@ -56,3 +56,19 @@ livros_paginados = ns.model("LivrosPaginados", {
 "total": fields.Integer(description="Total de registros"),
 "pages": fields.Integer(description="Total de páginas"),
 })
+
+filtros = ns.parser()
+filtros.add_argument("page", type = int, default=1, location="args", help="Número da página")
+
+filtros.add_argument("per_page", type=int, default=10, location="args", help="Itens por página (máx.100)")
+
+filtros.add_argument("per_page", type=str, location="args", help = "Filtra por parte do nome do autor")
+
+#verifica duplicidade o ignorar_id permite que o put mantenha o proprio ISBN
+def _isbn_em_uso(isbn, ignorar_id=None):
+    if not isbn:
+        return False
+    consulta = Livro.query.filter_by(isbn=isbn)
+    if ignorar_id:
+        consulta = consulta.filter(Livro.id != ignorar_id)
+    return consulta.first() is not None
